@@ -75,7 +75,7 @@
           if (valid) {
             this.uploadLoading(true);
             let params = {email: this.loginForm.email, password: this.loginForm.password};
-            http.post("http://zxxb.haibian.com/web/login", params).then(res => {
+            http.post("/", params).then(res => {
               if (res.code === 0) {
                 let expireHours = 60 * 60 * 6;//登录状态6小时后过期
                 this.setCookie('session', res.data.token, expireHours);
