@@ -31,6 +31,7 @@
 <script>
   import http from '../../config/http'
   import {setStore} from '../../utils/save_util'
+  import api from '../../api/api'
 
   export default {
     data() {
@@ -75,14 +76,14 @@
           if (valid) {
             this.uploadLoading(true);
             let params = {email: this.loginForm.email, password: this.loginForm.password};
-            http.post("/", params).then(res => {
+            http.post(api.login, params).then(res => {
               if (res.code === 0) {
                 let expireHours = 60 * 60 * 6;//登录状态6小时后过期
                 this.setCookie('session', res.data.token, expireHours);
                 this.$router.push('/index');
                 this.$message({
                   type: 'success',
-                  message: '登录成功',
+                  message: res.msg,
                   duration: 1000
                 });
               } else {

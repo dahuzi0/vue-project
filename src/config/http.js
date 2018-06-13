@@ -71,17 +71,8 @@ function uploadLog(res, url, send_params) {
 
 export default {
   post(url, params) {
-    for (let i in params) { // 解决php后台无法读取收据
-      if (params.hasOwnProperty(i) && typeof params[i] != "function") {
-        if (typeof (params[i]) == "object") {
-          params[i] = JSON.stringify(params[i]);
-        }
-      }
-    }
     return axios({
-      headers: {
-        'Authorization': "Bearer " + getStore('userToken')
-      },
+      headers: {},
       method: 'post',
       baseURL: baseURL,
       url,
@@ -105,9 +96,6 @@ export default {
       url,
       params,
       timeout: 10000,
-      headers: {
-        'Authorization': "Bearer " + getStore('userToken')
-      }
     }).then(
       (response) => {
         return checkStatus(response)
