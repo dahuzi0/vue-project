@@ -20,6 +20,22 @@ export default new Router({
         {
           path: '/index',
           component: resolve => require(['../page/index.vue'], resolve)   //
+        },
+        {
+          path: '/video',
+          component: resolve => require(['../page/video/video.vue'], resolve)   //
+        },
+        {
+          path: '/pic',
+          component: resolve => require(['../page/pic/pic.vue'], resolve)   //
+        },
+        {
+          path: '/text',
+          component: resolve => require(['../page/text/text.vue'], resolve)   //
+        },
+        {
+          path: '/map',
+          component: resolve => require(['../page/map/map.vue'], resolve)   //
         }
       ]
     }

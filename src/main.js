@@ -55,7 +55,7 @@ new Vue({
   methods: {
     checkLogin() {
       //检查是否存在session
-      if (!this.getCookie('session')) {
+      if (!this.getCookie('session_earl')) {
         this.$router.push('/login');
       } else {
         let routeName = this.$route.path;

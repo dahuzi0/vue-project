@@ -79,7 +79,7 @@
             http.post(api.login, params).then(res => {
               if (res.code === 0) {
                 let expireHours = 60 * 60 * 6;//登录状态6小时后过期
-                this.setCookie('session', res.data.token, expireHours);
+                this.setCookie('session_earl', res.data.token, expireHours);
                 this.$router.push('/index');
                 this.$message({
                   type: 'success',
