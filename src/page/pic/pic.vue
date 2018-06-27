@@ -6,19 +6,31 @@
 
 <template>
   <div>
+
+    <p>实时效果：</p>
+    <div class="show-preview"
+         :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
+      <div :style="previews.div">
+        <img :src="previews.url" :style="previews.img">
+      </div>
+    </div>
+
+    <p>生成图片：</p>
+    <img :src="this.createImgUrl" :style="{'margin': '5px'}">
+
     <div class="clearfix _cropper">
       <div class="_pic">
         <vueCropper
           ref="cropper"
-          :img="this.option.img"
-          :outputSize="this.option.size"
-          :outputType="this.option.outputType"
+          :img="option.img"
+          :outputSize="option.size"
+          :outputType="option.outputType"
           :info="true"
-          :full="this.option.full"
-          :canMove="this.option.canMove"
-          :canMoveBox="this.option.canMoveBox"
-          :fixedBox="this.option.fixedBox"
-          :original="this.option.original"
+          :full="option.full"
+          :canMove="option.canMove"
+          :canMoveBox="option.canMoveBox"
+          :fixedBox="option.fixedBox"
+          :original="option.original"
           @realTime="realTime"
         ></vueCropper>
       </div>
@@ -29,10 +41,8 @@
       <button @click="startCrop" v-if="!crap" class="btn">start</button>
       <button @click="stopCrop" v-else class="btn">stop</button>
       <button @click="clearCrop" class="btn">clear</button>
-      <button @click="finish('base64')" class="btn">preview(base64)</button>
-      <button @click="finish('blob')" class="btn">preview(blob)</button>
-      <a @click="down('base64')" class="btn">download(base64)</a>
-      <a @click="down('blob')" class="btn">download(blob)</a>
+      <button @click="finish()" class="btn">finish()</button>
+      <a @click="down()" class="btn">download()</a>
       <div style="display:block; width: 100%;">
         <label class="c-item">
           <span>上传图片是否显示原始宽高 (针对大图 可以铺满)</span>
@@ -62,12 +72,6 @@
         </label>
       </div>
     </div>
-    <div class="show-preview"
-         :style="{'width': previews.w + 'px', 'height': previews.h + 'px',  'overflow': 'hidden', 'margin': '5px'}">
-      <div :style="previews.div">
-        <img :src="previews.url" :style="previews.img">
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -87,7 +91,7 @@
           }
         ],
         option: {
-          img: 'https://fengyuanchen.github.io/cropper/images/picture.jpg',
+          img: '',
           size: 1,
           full: false,
           outputType: 'png',
@@ -96,65 +100,58 @@
           original: false,
           canMoveBox: false
         },
-        downImg: '#'
+        downImg: '#',
+        createImgUrl: ''
       }
     },
     created: function () {
-
+      this.changeImg();
     },
     methods: {
+      changeImg() {
+        this.option.img = this.lists[~~(Math.random() * this.lists.length)].img
+      },
+
       startCrop() {
         // start
         this.crap = true
         this.$refs.cropper.startCrop()
       },
+
       stopCrop() {
         //  stop
         this.crap = false
         this.$refs.cropper.stopCrop()
       },
+
       clearCrop() {
         // clear
         this.$refs.cropper.clearCrop()
       },
+
       // 实时预览函数
       realTime(data) {
         this.previews = data
       },
+
       finish(type) {
+        let self = this;
         // 输出
-        var test = window.open('about:blank')
-        test.document.body.innerHTML = '图片生成中..'
-        if (type === 'blob') {
-          this.$refs.cropper.getCropBlob((data) => {
-            var test = window.open('')
-            test.location.href = window.URL.createObjectURL(data)
-          })
-        } else {
-          this.$refs.cropper.getCropData((data) => {
-            test.location.href = data
-          })
-        }
+        this.$refs.cropper.getCropData((data) => {
+          self.createImgUrl = data
+        })
       },
 
-      down(type) {
+      down() {
         // event.preventDefault()
-        var aLink = document.createElement('a')
+        let aLink = document.createElement('a')
         aLink.download = 'demo'
         // 输出
-        if (type === 'blob') {
-          this.$refs.cropper.getCropBlob((data) => {
-            this.downImg = data
-            aLink.href = data
-            aLink.click()
-          })
-        } else {
-          this.$refs.cropper.getCropData((data) => {
-            this.downImg = data
-            aLink.href = data
-            aLink.click()
-          })
-        }
+        this.$refs.cropper.getCropData((data) => {
+          this.downImg = data
+          aLink.href = data
+          aLink.click()
+        })
       },
 
       uploadImg(e, num) {
@@ -202,12 +199,12 @@
     user-select: none;
   }
 
-  ._cropper{
+  ._cropper {
     position: relative;
     height: 700px;
   }
 
-  .show-preview{
+  .show-preview {
     margin-bottom: 10px;
   }
 </style>
