@@ -2,6 +2,16 @@
 ## 项目连接
 [http://xinliu.vip/categories/vue/](http://xinliu.vip/categories/vue/)
 
+## 使用
+环境 node 10.x
+
+## 使用
+``` json
+git clone https://github.com/EARL8888/vue-project.git
+
+npm install
+```
+
 ## 项目 目录
 
 ```json 
